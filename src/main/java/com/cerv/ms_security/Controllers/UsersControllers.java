@@ -2,6 +2,7 @@ package com.cerv.ms_security.Controllers;
 
 import com.cerv.ms_security.Models.User;
 import com.cerv.ms_security.Repositories.UserRepository;
+import com.cerv.ms_security.Services.EncryptionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -9,11 +10,14 @@ import java.util.List;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/users")
+@RequestMapping("/api/users")
 
 public class UsersControllers {
     @Autowired
     UserRepository theUserRepository;
+
+    @Autowired
+    EncryptionService theEncryptionService;
 
     @GetMapping("")
     public List<User> find(){
@@ -33,6 +37,7 @@ public class UsersControllers {
 
     @PostMapping // post crear
     public User create(@RequestBody User newUser){ // nuevo usuario, @ dentro del cuerpo de la petición  se va a leer el json y va a ser casteado a un usuario en java en este caso newUser
+        newUser.setPassword(this.theEncryptionService.convertSHA256(newUser.getPassword())); //al nuevo usuario le cambio la nueva contraseña con lo que viene cifrado
         return this.theUserRepository.save(newUser); // le dice al repositorio que haga un almacenamiento del usuario
     }
 
@@ -42,7 +47,7 @@ public class UsersControllers {
         if (actualUser != null){ // si es diferente de null
             actualUser.setName(newUser.getName()); //modifica su nombre
             actualUser.setEmail(newUser.getEmail()); //modifica su correo
-            actualUser.setPassword(newUser.getPassword()); //modifica su contraseña
+            actualUser.setPassword(this.theEncryptionService.convertSHA256(actualUser.getPassword())); //modifica su contraseña
             this.theUserRepository.save(actualUser);
             return actualUser;
         }else{

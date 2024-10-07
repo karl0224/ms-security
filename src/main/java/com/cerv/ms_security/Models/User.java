@@ -4,18 +4,21 @@ import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+
 @Data //para que guarde esa clase en persistencia, se almacena en una base de datos
 @Document //de mongo, como quiere lo que se llame la tabla en la base de datos, toma el nombre por defecto del usuario
-
 public class User {
     @Id //a mongo, para decirle que el atributo Id se cree automaticamente
-    String _id;
-    String name;
-    String email;
-    String password;
-    Role role;
+    private String _id;
+    private String name;
+    private String email;
+    private String password;
 
-    public User(String name, String email, String password, Role role) {
+    public User(){
+
+    }
+
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
@@ -53,11 +56,4 @@ public class User {
         this.password = password;
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
 }

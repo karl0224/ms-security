@@ -12,9 +12,8 @@ public class Session {
     private String _id;
     private String token;
     private String expirationDate;
-    @DBRef
+    @DBRef //referencia la sesion de ese usuario, no haga redundancia sino que apunta directamente al usuario
     private User user; // This is the user that is logged in
-
 
     public Session(String token, String expirationDate) {
         this.token = token;
